@@ -1,0 +1,80 @@
+
+exp_name: "exp_DIL_BASELINE"
+debug: True
+debug_iter: 33
+
+exp_extra_name: ''
+
+
+
+base_extra_name: ''
+
+#Model Cfg
+
+model: "Replay" # FT/Replay
+
+architecture: 'resnet18' # resnet18/
+ema_decay: 0.9997
+ema_start_epoch: 0
+ema_model_use: False
+amp_use: False
+
+
+
+#val_per_n_epoch: 3 # Validation Per N epoch. -1 means the function is off.
+save_ckpt: True
+load_ckpt: False
+load_base_ckpt: True
+load_sub_exp_ckpt: True
+sub_exp_tasks: 2
+
+#replay & kd settings
+sample_selection_method: 'random' # random/herding/clustering
+sample_per_cls: 80
+sample_ratio: 0.1
+
+
+#Optimization;Training related
+evaluation: False
+tasks: 2
+diseases:
+  - 'normal'
+  - 'glaucoma'
+  - 'amd'
+  - 'dr'
+  - 'myopia'
+lr: 0.001
+min_lr: 0.00001
+weight_decay: 0.000
+patience: 10
+lr_decay: 0.1
+optimizer: "sgd"
+epochs: 80
+
+
+
+pretrain_model: True # Use ImageNet pretrained model
+
+
+# Dataset Cfg
+dataset: "fundus" #
+base_dir:
+  - '/amax/home/shukuang/data/DIL712_preprocessed/ODIR_ALL_512'
+  - '/amax/home/shukuang/data/DIL712_preprocessed/RIADD_REFUGE_512'
+batch_size: 32
+workers: 8
+validation: 0 # Validation split (0. <= x <= 1.)
+
+scale_size: 512
+
+
+#Memory
+#coreset_strategy: "random"  # iCaRL, random
+#mem_size_mode: "uniform_fixed_per_cls" #uniform_fixed_per_cls, uniform_fixed_total_mem
+#memory_size: 2000 # Max number of storable examplars
+#fixed_memory_per_cls: 20 # the fixed number of exemplars per cls
+
+load_to_ram: False
+device: 3 #GPU index to use
+seed: 4
+

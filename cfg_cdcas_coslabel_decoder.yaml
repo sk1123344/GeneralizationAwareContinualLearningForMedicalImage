@@ -1,0 +1,109 @@
+
+exp_name: "exp_DIL_GCL"
+debug: True
+debug_iter: 33
+
+exp_extra_name: 'all'
+
+
+
+base_extra_name: ''
+
+#Model Cfg
+
+model: "CDCAS_coslabel_decoder" # CDCAS_cos_decoder
+
+architecture: 'resnet18' # resnet18/
+ema_decay: 0.9997
+ema_start_epoch: 0
+ema_model_use: False
+amp_use: False
+
+## Transformer Decoder settings
+#num_blocks: 4
+#embedding_dim: 384
+#feed_forward_ratio: 4
+#n_head: 4
+#token_type: 'cls' # cls/task
+#use_self_attention: False
+
+
+loss_scale: 30
+loss_margin: 0.4
+
+#val_per_n_epoch: 3 # Validation Per N epoch. -1 means the function is off.
+save_ckpt: True
+load_ckpt: False
+load_base_ckpt: True
+load_sub_exp_ckpt: True
+sub_exp_tasks: 2
+
+#replay & kd settings
+sample_selection_method: 'random' # random/herding/clustering
+sample_per_cls: 80
+sample_ratio: 0.1
+
+
+
+##psudo_label settings
+#pseudo_label_type: 'auto' #fix/auto/optimized
+#pseudo_label_threshold: 0.75
+#auto_epoch: 10
+
+#Optimization;Training related
+evaluation: False
+tasks: 2
+diseases:
+  - 'normal'
+  - 'glaucoma'
+  - 'amd'
+  - 'dr'
+  - 'myopia'
+lr: 0.001
+min_lr: 0.00001
+weight_decay: 0.000
+patience: 10
+lr_decay: 0.1
+optimizer: "sgd"
+epochs: 80
+
+
+# DCAS margin
+ccas_margin: 0.4
+dcas_margin: True # minimum cls prototype distance
+dcas_sampling: True # sample from multi normal distribution
+dcas_only_base: False # use the distribution from base phase
+dcas_sample_adjust: False # postive_pairs/negative_pairs
+dcas_replay_sample_alignment: True #distribution KD
+dcas_aug: True
+dcas_cos: True
+ccas_train_data: 'all' # new/all
+ccas_lambda: 0.25
+
+
+
+pretrain_model: True # Use ImageNet pretrained model
+
+
+# Dataset Cfg
+dataset: "fundus" #
+base_dir:
+  - '/amax/home/shukuang/data/DIL712_preprocessed/ODIR_ALL_512'
+  - '/amax/home/shukuang/data/DIL712_preprocessed/RIADD_REFUGE_512'
+batch_size: 32
+workers: 4
+validation: 0 # Validation split (0. <= x <= 1.)
+
+scale_size: 512
+
+
+#Memory
+#coreset_strategy: "random"  # iCaRL, random
+#mem_size_mode: "uniform_fixed_per_cls" #uniform_fixed_per_cls, uniform_fixed_total_mem
+#memory_size: 2000 # Max number of storable examplars
+#fixed_memory_per_cls: 20 # the fixed number of exemplars per cls
+
+load_to_ram: False
+device: 1 #GPU index to use
+seed: 4
+
